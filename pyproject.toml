@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "gerberaud"
+version = "0.1.0"
+description = "A Python project without src folder, using mypy and unit tests"
+authors = ["Miklos Daniel <your.email@example.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+[tool.poetry.dev-dependencies]
+mypy = "^1.2"
+pytest = "^7.0" # If you prefer unittest, omit this and use `unittest` directly
+
+[tool.mypy]
+python_version = "3.12"
+files = ["gerberaud"]
+strict = true
+ignore_missing_imports = true
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
