@@ -1,4 +1,6 @@
-__all__ = ["MarkdownFormatter"]
+from typing import TypeVar
+
+T = TypeVar("T")
 
 
 class MarkdownFormatter:
@@ -30,3 +32,38 @@ class MarkdownFormatter:
     @staticmethod
     def code(lang: str, code: str) -> str:
         return f"```{lang}\n{code}\n```\n\n"
+
+    @staticmethod
+    def table(labels: list[str], rows: list[dict]) -> str:
+        col_num = len(labels)
+        if col_num == 0 and len(rows) == 0:
+            return ""
+
+        if any(len(row) != col_num for row in rows):
+            raise ValueError("Table column dimension mismatch")
+
+        return "".join([
+            MarkdownFormatter.table_head(labels=labels),
+            MarkdownFormatter.table_body(rows=rows)
+        ])
+
+    @staticmethod
+    def table_head(labels: list[str]) -> str:
+        col_num = len(labels)
+        top = f"| {" | ".join(labels)} |\n"
+        bottom = f"| {" | ".join(MarkdownFormatter._repeat(
+            val="---", times=col_num))} |\n"
+        return top + bottom
+
+    # TODO: ensure same order
+    @staticmethod
+    def table_body(rows: list[dict]) -> str:
+        def make_row(row: dict):
+            row_values = list(row.values())
+            return f"| {" | ".join(row_values)} |\n"
+
+        return "".join(list(map(make_row, rows))) + "\n"
+
+    @staticmethod
+    def _repeat(val: T, times: int) -> list[T]:
+        return [val] * times
